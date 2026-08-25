@@ -1,7 +1,8 @@
 {
-  "name": "react-example",
+  "name": "projectmatch-synergyos",
   "private": true,
-  "version": "0.0.0",
+  "version": "2.5.0",
+  "description": "Evidence-based hackathon team formation engine with AI-powered synergy simulation, smart matching, and sprint charter generation.",
   "type": "module",
   "scripts": {
     "dev": "tsx server.ts",

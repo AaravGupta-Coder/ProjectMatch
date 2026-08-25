@@ -153,7 +153,7 @@ export const AISkillGapSuggestionCard: React.FC<AISkillGapSuggestionCardProps> =
 
   if (!suggestion && isLoading) {
     return (
-      <div className="bg-gradient-to-r from-indigo-50/80 via-purple-50/60 to-slate-50 border border-indigo-200/80 rounded-3xl p-6 shadow-xs animate-pulse">
+      <div className="bg-gradient-to-r from-indigo-50/80 via-purple-50/60 to-slate-50 border border-indigo-200/80 rounded-3xl p-6 shadow-xs animate-pulse" role="status" aria-live="polite" aria-label="Loading skill gap analysis">
         <div className="flex items-center space-x-3">
           <div className="w-8 h-8 rounded-xl bg-indigo-200" />
           <div className="space-y-2 flex-1">
@@ -168,11 +168,20 @@ export const AISkillGapSuggestionCard: React.FC<AISkillGapSuggestionCardProps> =
   if (!suggestion) return null;
 
   return (
-    <div className="bg-gradient-to-br from-slate-900 via-indigo-950 to-slate-900 text-white rounded-3xl p-5 sm:p-7 border border-indigo-800/40 shadow-xl relative overflow-hidden">
+    <div 
+      role="region" 
+      aria-labelledby="ai-skill-gap-heading"
+      className="bg-gradient-to-br from-slate-900 via-indigo-950 to-slate-900 text-white rounded-3xl p-5 sm:p-7 border border-indigo-800/40 shadow-xl relative overflow-hidden"
+    >
+      
+      {/* Skip to main content link for screen readers */}
+      <a href="#main-content" className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-50 focus:px-4 focus:py-2 focus:bg-indigo-600 focus:text-white focus:rounded-xl focus:text-sm focus:font-bold">
+        Skip to main content
+      </a>
       
       {/* Ambient background glow */}
-      <div className="absolute top-0 right-0 w-96 h-96 bg-indigo-500/10 rounded-full blur-3xl pointer-events-none -mr-20 -mt-20" />
-      <div className="absolute bottom-0 left-1/3 w-64 h-64 bg-purple-500/10 rounded-full blur-3xl pointer-events-none" />
+      <div className="absolute top-0 right-0 w-96 h-96 bg-indigo-500/10 rounded-full blur-3xl pointer-events-none -mr-20 -mt-20" aria-hidden="true" />
+      <div className="absolute bottom-0 left-1/3 w-64 h-64 bg-purple-500/10 rounded-full blur-3xl pointer-events-none" aria-hidden="true" />
 
       {/* Header bar */}
       <div className="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-4 pb-5 border-b border-indigo-800/50">
@@ -180,19 +189,19 @@ export const AISkillGapSuggestionCard: React.FC<AISkillGapSuggestionCardProps> =
           <div className="w-10 h-10 rounded-2xl bg-gradient-to-tr from-indigo-500 to-purple-500 flex items-center justify-center shadow-lg shadow-indigo-500/30 text-white">
             <Sparkles className="w-5 h-5" />
           </div>
-          <div>
-            <div className="flex items-center space-x-2">
-              <span className="text-[11px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full bg-indigo-500/20 text-indigo-300 border border-indigo-400/30">
-                AI Skill Complementarity Reasoning
-              </span>
-              <span className="text-[10px] font-semibold text-indigo-300/80 bg-white/5 px-2 py-0.5 rounded-full">
-                {dataSource.includes('gemini') ? '⚡ Gemini 3.7 Live Inference' : 'Algorithmic Synthesis'}
-              </span>
+            <div>
+              <div className="flex items-center space-x-2">
+                <span className="text-[11px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full bg-indigo-500/20 text-indigo-300 border border-indigo-400/30">
+                  AI Skill Complementarity Reasoning
+                </span>
+                <span className="text-[10px] font-semibold text-indigo-300/80 bg-white/5 px-2 py-0.5 rounded-full">
+                  {dataSource.includes('gemini') ? 'Gemini 3.7 Live Inference' : 'Algorithmic Synthesis'}
+                </span>
+              </div>
+              <h2 id="ai-skill-gap-heading" className="text-lg font-extrabold text-white tracking-tight mt-0.5">
+                Squad Triangulation & Strategic Gap Diagnosis
+              </h2>
             </div>
-            <h3 className="text-lg font-extrabold text-white tracking-tight mt-0.5">
-              Squad Triangulation & Strategic Gap Diagnosis
-            </h3>
-          </div>
         </div>
 
         <div className="flex items-center space-x-3">
@@ -207,18 +216,18 @@ export const AISkillGapSuggestionCard: React.FC<AISkillGapSuggestionCardProps> =
             onClick={() => fetchSkillGapReasoning(selectedFocus)}
             disabled={isLoading}
             className="inline-flex items-center space-x-1.5 px-3.5 py-2 rounded-xl text-xs font-bold bg-white/10 hover:bg-white/20 text-white border border-white/15 backdrop-blur-xs transition-all disabled:opacity-50"
-            title="Recalculate with AI"
+            aria-label="Recalculate skill gap reasoning"
           >
-            <RefreshCw className={`w-3.5 h-3.5 ${isLoading ? 'animate-spin text-indigo-300' : ''}`} />
+            <RefreshCw className={`w-3.5 h-3.5 ${isLoading ? 'animate-spin text-indigo-300' : ''}`} aria-hidden="true" />
             <span>{isLoading ? 'Reasoning...' : 'Re-Evaluate'}</span>
           </button>
         </div>
       </div>
 
       {/* Focus Area Pill Selector */}
-      <div className="relative z-10 py-3.5 flex items-center space-x-2 overflow-x-auto no-scrollbar">
+      <div className="relative z-10 py-3.5 flex items-center space-x-2 overflow-x-auto no-scrollbar" role="group" aria-label="Evaluation focus options">
         <span className="text-xs font-bold text-indigo-300/90 whitespace-nowrap flex items-center space-x-1">
-          <Sliders className="w-3.5 h-3.5 mr-1" />
+          <Sliders className="w-3.5 h-3.5 mr-1" aria-hidden="true" />
           <span>Evaluation Lens:</span>
         </span>
         {focusOptions.map((f) => (
@@ -230,6 +239,7 @@ export const AISkillGapSuggestionCard: React.FC<AISkillGapSuggestionCardProps> =
                 ? 'bg-indigo-600 text-white shadow-md shadow-indigo-600/40 border border-indigo-400/40 font-bold'
                 : 'bg-white/5 hover:bg-white/10 text-slate-300 border border-white/10'
             }`}
+            aria-pressed={selectedFocus === f}
           >
             {f}
           </button>
@@ -332,15 +342,17 @@ export const AISkillGapSuggestionCard: React.FC<AISkillGapSuggestionCardProps> =
         <button
           onClick={() => setShowDetailedRationale(!showDetailedRationale)}
           className="flex items-center space-x-1.5 text-xs text-indigo-300 hover:text-white transition-colors font-semibold"
+          aria-expanded={showDetailedRationale}
+          aria-controls="detailed-rationale-content"
         >
           <span>{showDetailedRationale ? 'Hide Architectural Rationale' : 'Why this combination wins (Architectural Rationale)'}</span>
-          {showDetailedRationale ? <ChevronUp className="w-3.5 h-3.5" /> : <ChevronDown className="w-3.5 h-3.5" />}
+          {showDetailedRationale ? <ChevronUp className="w-3.5 h-3.5" aria-hidden="true" /> : <ChevronDown className="w-3.5 h-3.5" aria-hidden="true" />}
         </button>
 
         {showDetailedRationale && (
-          <div className="mt-2.5 bg-slate-950/60 border border-indigo-800/40 rounded-xl p-4 space-y-2 text-xs text-slate-300 leading-relaxed animate-in fade-in duration-200">
+          <div id="detailed-rationale-content" className="mt-2.5 bg-slate-950/60 border border-indigo-800/40 rounded-xl p-4 space-y-2 text-xs text-slate-300 leading-relaxed animate-in fade-in duration-200">
             <p className="text-indigo-200 font-bold text-xs">{suggestion.shortWhy}</p>
-            <ul className="space-y-1.5 list-disc list-inside text-[11px] text-slate-300/90 pt-1">
+            <ul className="space-y-1.5 list-disc list-inside text-[11px] text-slate-300/90 pt-1" role="list">
               {suggestion.detailedRationale.map((item, idx) => (
                 <li key={idx}>{item}</li>
               ))}
@@ -366,18 +378,20 @@ export const AISkillGapSuggestionCard: React.FC<AISkillGapSuggestionCardProps> =
             <button
               onClick={() => onNavigateToDiscoveryWithFilter(suggestion.targetPersonSkills[0] || suggestion.targetRole)}
               className="text-xs font-bold text-indigo-300 hover:text-white flex items-center space-x-1 transition-colors self-start sm:self-center"
+              aria-label={`Explore all candidates with ${suggestion.targetPersonSkills[0] || suggestion.targetRole} skills`}
             >
               <span>Explore All Candidates with These Skills</span>
-              <ArrowRight className="w-3.5 h-3.5" />
+              <ArrowRight className="w-3.5 h-3.5" aria-hidden="true" />
             </button>
           )}
         </div>
 
         {/* Candidate Mini Cards Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-3" role="list" aria-label="Matching candidates for skill gap">
           {fallbackMatchingCandidates.map((candidate) => (
             <div
               key={candidate.id}
+              role="listitem"
               className="bg-slate-900/80 hover:bg-slate-800/90 border border-indigo-500/30 hover:border-indigo-400/60 rounded-2xl p-3.5 transition-all flex flex-col justify-between space-y-3 group"
             >
               <div className="flex items-start space-x-3">
@@ -422,6 +436,7 @@ export const AISkillGapSuggestionCard: React.FC<AISkillGapSuggestionCardProps> =
                     <button
                       onClick={() => onOpenRadarModal(candidate)}
                       className="p-1.5 rounded-lg text-indigo-300 hover:bg-white/10 hover:text-white transition-colors"
+                      aria-label={`Inspect 6-axis radar for ${candidate.name}`}
                       title="Inspect 6-Axis Radar"
                     >
                       <Radar className="w-3.5 h-3.5" />
@@ -431,6 +446,7 @@ export const AISkillGapSuggestionCard: React.FC<AISkillGapSuggestionCardProps> =
                     <button
                       onClick={() => onOpenContactModal(candidate)}
                       className="p-1.5 rounded-lg text-purple-300 hover:bg-white/10 hover:text-white transition-colors"
+                      aria-label={`Send pitch invite to ${candidate.name}`}
                       title="Send Pitch Invite"
                     >
                       <Send className="w-3.5 h-3.5" />
@@ -443,7 +459,7 @@ export const AISkillGapSuggestionCard: React.FC<AISkillGapSuggestionCardProps> =
                   onClick={() => onAddToTeam(candidate)}
                   className="inline-flex items-center space-x-1 px-3 py-1 rounded-xl text-xs font-bold bg-emerald-500 hover:bg-emerald-400 text-slate-950 shadow-xs transition-all active:scale-95"
                 >
-                  <Plus className="w-3.5 h-3.5" />
+                  <Plus className="w-3.5 h-3.5" aria-hidden="true" />
                   <span>Add to Squad</span>
                 </button>
               </div>

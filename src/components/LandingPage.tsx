@@ -37,21 +37,21 @@ export const LandingPage: React.FC<LandingPageProps> = ({
   initialUser = INITIAL_CANDIDATES[1] // Default Diya Sen (UX Crafter)
 }) => {
   // Step 1: User Profile state
-  const [selectedDemoUser, setSelectedDemoUser] = useState<string>(initialUser.id);
-  const [name, setName] = useState(initialUser.name);
-  const [email, setEmail] = useState(initialUser.contactInfo?.email || 'diya.sen@bits.ac.in');
-  const [college, setCollege] = useState(initialUser.college);
-  const [department, setDepartment] = useState(initialUser.department);
-  const [yearOfStudy, setYearOfStudy] = useState<AcademicYear>(initialUser.yearOfStudy || '3rd Year');
-  const [gender, setGender] = useState<'Male' | 'Female' | 'Non-Binary' | 'Prefer not to say'>(initialUser.gender || 'Female');
-  const [primaryRole, setPrimaryRole] = useState<PrimaryRole>(initialUser.primaryRole);
-  const [archetype, setArchetype] = useState<Archetype>(initialUser.archetype);
-  const [skillsString, setSkillsString] = useState(initialUser.topSkills.join(', '));
-  const [weeklyHours, setWeeklyHours] = useState<number>(initialUser.weeklyAvailabilityHours);
-  const [experienceLevel, setExperienceLevel] = useState<string>(initialUser.experienceLevel || 'Undergrad');
-  const [bio, setBio] = useState(initialUser.bio);
-  const [github, setGithub] = useState(initialUser.githubUsername || 'diyasen');
-  const [avatar, setAvatar] = useState(initialUser.avatar);
+  const [selectedDemoUser, setSelectedDemoUser] = useState<string>('');
+  const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
+  const [college, setCollege] = useState('');
+  const [department, setDepartment] = useState('');
+  const [yearOfStudy, setYearOfStudy] = useState<AcademicYear>('3rd Year');
+  const [gender, setGender] = useState<'Male' | 'Female' | 'Non-Binary' | 'Prefer not to say'>('Prefer not to say');
+  const [primaryRole, setPrimaryRole] = useState<PrimaryRole>('Full-Stack Engineer');
+  const [archetype, setArchetype] = useState<Archetype>('System Architect');
+  const [skillsString, setSkillsString] = useState('');
+  const [weeklyHours, setWeeklyHours] = useState<number>(25);
+  const [experienceLevel, setExperienceLevel] = useState<string>('Intermediate');
+  const [bio, setBio] = useState('');
+  const [github, setGithub] = useState('');
+  const [avatar, setAvatar] = useState('');
 
   // Step 2: Intent state
   const [intent, setIntent] = useState<UserIntent>('join');
