@@ -349,6 +349,6 @@ export const CandidateCard: React.FC<CandidateCardProps> = ({
           </button>
         )}
       </div>
-    </div>
+    </article>
   );
 };

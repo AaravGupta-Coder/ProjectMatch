@@ -1,8 +1,8 @@
-import { describe, it, expect, vi } from 'vitest';
+import { describe, it, expect, vi, beforeEach } from 'vitest';
 import '@testing-library/jest-dom';
-import { render, screen, fireEvent } from '@testing-library/react';
+import { render, screen, waitFor } from '@testing-library/react';
 import { AISkillGapSuggestionCard } from '../components/AISkillGapSuggestionCard';
-import { UserCandidate, ProjectRequirement } from '../types';
+import { UserCandidate, ProjectRequirement, SkillGapReasoningResult } from '../types';
 
 const mockCandidate = (overrides: Partial<UserCandidate> = {}): UserCandidate => ({
   id: 'c1',
@@ -46,6 +46,30 @@ const mockProject: ProjectRequirement = {
   keyMilestones: [],
 };
 
+const mockSuggestion: SkillGapReasoningResult = {
+  targetPersonSkills: ['React', 'TypeScript', 'Node.js'],
+  teamHaveSkills: ['Python', 'ML'],
+  projectNeedSkills: ['Frontend', 'UI'],
+  targetRole: 'UI/UX Product Designer',
+  targetArchetype: 'UX Crafter',
+  headlineSentence: 'You need a person with React and TypeScript skills.',
+  shortWhy: 'To complete the team.',
+  detailedRationale: ['Rationale 1', 'Rationale 2'],
+  recommendedFocus: 'UI/UX',
+  predictedSynergyBoost: '+20%',
+  confidenceScore: 90,
+  matchingCandidateIds: ['c1'],
+};
+
+beforeEach(() => {
+  global.fetch = vi.fn(() =>
+    Promise.resolve({
+      ok: true,
+      json: () => Promise.resolve({ success: true, data: mockSuggestion, source: 'test' }),
+    } as Response)
+  );
+});
+
 describe('AISkillGapSuggestionCard', () => {
   const defaultProps = {
     currentTeam: [] as UserCandidate[],
@@ -57,47 +81,59 @@ describe('AISkillGapSuggestionCard', () => {
     onOpenContactModal: vi.fn(),
   };
 
-  it('renders without crashing', () => {
+  it('renders without crashing', async () => {
     render(<AISkillGapSuggestionCard {...defaultProps} />);
-    expect(screen.getByText(/Squad Triangulation/)).toBeInTheDocument();
-  });
-
-  it('has proper ARIA region role', () => {
-    render(<AISkillGapSuggestionCard {...defaultProps} />);
-    const region = screen.getByRole('region', { name: /AI Skill Complementarity Reasoning/i });
-    expect(region).toBeInTheDocument();
-  });
-
-  it('renders focus options with aria-pressed', () => {
-    render(<AISkillGapSuggestionCard {...defaultProps} />);
-    const focusButtons = screen.getAllByRole('button').filter(btn => 
-      btn.textContent?.includes('Auto-Detect Complementarity') || 
-      btn.textContent?.includes('UI / UX & Front-End Polish')
-    );
-    expect(focusButtons.length).toBeGreaterThan(0);
-    focusButtons.forEach(btn => {
-      expect(btn).toHaveAttribute('aria-pressed');
+    await waitFor(() => {
+      expect(screen.getByText(/Squad Triangulation/)).toBeInTheDocument();
     });
   });
 
-  it('has accessible toggle for detailed rationale', () => {
+  it('has proper ARIA region role', async () => {
     render(<AISkillGapSuggestionCard {...defaultProps} />);
-    const toggleBtn = screen.getByText(/Why this combination wins/i);
-    expect(toggleBtn.closest('button')).toHaveAttribute('aria-expanded');
-    expect(toggleBtn.closest('button')).toHaveAttribute('aria-controls');
+    await waitFor(() => {
+      const region = screen.getByRole('region', { name: /AI Skill Complementarity Reasoning/i });
+      expect(region).toBeInTheDocument();
+    });
   });
 
-  it('has aria-labels on icon-only buttons', () => {
+  it('renders focus options with aria-pressed', async () => {
     render(<AISkillGapSuggestionCard {...defaultProps} />);
-    const radarButtons = screen.getAllByRole('button').filter(btn => 
-      btn.getAttribute('aria-label')?.includes('radar')
-    );
-    expect(radarButtons.length).toBeGreaterThan(0);
+    await waitFor(() => {
+      const focusButtons = screen.getAllByRole('button').filter(btn => 
+        btn.textContent?.includes('Auto-Detect Complementarity') || 
+        btn.textContent?.includes('UI / UX & Front-End Polish')
+      );
+      expect(focusButtons.length).toBeGreaterThan(0);
+      focusButtons.forEach(btn => {
+        expect(btn).toHaveAttribute('aria-pressed');
+      });
+    });
   });
 
-  it('has accessible candidate list', () => {
+  it('has accessible toggle for detailed rationale', async () => {
     render(<AISkillGapSuggestionCard {...defaultProps} />);
-    const candidateList = screen.getByRole('list', { name: /Matching candidates/i });
-    expect(candidateList).toBeInTheDocument();
+    await waitFor(() => {
+      const toggleBtn = screen.getByText(/Why this combination wins/i);
+      expect(toggleBtn.closest('button')).toHaveAttribute('aria-expanded');
+      expect(toggleBtn.closest('button')).toHaveAttribute('aria-controls');
+    });
+  });
+
+  it('has aria-labels on icon-only buttons', async () => {
+    render(<AISkillGapSuggestionCard {...defaultProps} />);
+    await waitFor(() => {
+      const radarButtons = screen.getAllByRole('button').filter(btn => 
+        btn.getAttribute('aria-label')?.includes('radar')
+      );
+      expect(radarButtons.length).toBeGreaterThan(0);
+    });
+  });
+
+  it('has accessible candidate list', async () => {
+    render(<AISkillGapSuggestionCard {...defaultProps} />);
+    await waitFor(() => {
+      const candidateList = screen.getByRole('list', { name: /Matching candidates/i });
+      expect(candidateList).toBeInTheDocument();
+    });
   });
 });

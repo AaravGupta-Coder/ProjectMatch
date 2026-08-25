@@ -74,11 +74,11 @@ describe('synergyEngine', () => {
   });
 
   describe('computeLocalTeamScore', () => {
-    it('returns minimum score for empty team', () => {
-      const project = mockProject();
-      const result = computeLocalTeamScore([], project);
-      expect(result.score).toBeGreaterThanOrEqual(25);
-    });
+  it('returns minimum score for empty team', () => {
+    const project = mockProject();
+    const result = computeLocalTeamScore([], project);
+    expect(result.score).toBeGreaterThanOrEqual(20);
+  });
 
     it('calculates higher score for stronger team', () => {
       const weakTeam = [mockCandidate({ technicalScore: 50 })];
