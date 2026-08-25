@@ -72,7 +72,7 @@ export const CandidateCard: React.FC<CandidateCardProps> = ({
   const isPositiveDelta = delta >= 0;
 
   return (
-    <div 
+    <article 
       id={`candidate-card-${candidate.id}`}
       className={`relative bg-white rounded-3xl border transition-all duration-200 hover:shadow-md flex flex-col justify-between ${
         isInTeam 
@@ -82,6 +82,7 @@ export const CandidateCard: React.FC<CandidateCardProps> = ({
             : 'border-slate-200 hover:border-slate-300'
       }`}
     >
+      
       {/* Top Banner: AI Match or Score Delta Preview */}
       {!isInTeam && deltaSimulation && (
         <div 
@@ -94,6 +95,15 @@ export const CandidateCard: React.FC<CandidateCardProps> = ({
           }`}
           onMouseEnter={() => setShowDeltaTooltip(true)}
           onMouseLeave={() => setShowDeltaTooltip(false)}
+          role="status"
+          aria-label={`Score delta simulation: ${deltaSimulation.currentScore} to ${deltaSimulation.projectedScore}`}
+          tabIndex={0}
+          onKeyDown={(e) => {
+            if (e.key === 'Enter' || e.key === ' ') {
+              e.preventDefault();
+              setShowDeltaTooltip(!showDeltaTooltip);
+            }
+          }}
         >
           <div className="flex items-center space-x-1.5">
             <Sparkles className="w-3.5 h-3.5" />
@@ -259,9 +269,9 @@ export const CandidateCard: React.FC<CandidateCardProps> = ({
 
         {/* Expandable Project Details */}
         {expanded && (
-          <div className="mt-4 pt-3 border-t border-slate-200/80 space-y-2.5">
+          <div id={`candidate-details-${candidate.id}`} className="mt-4 pt-3 border-t border-slate-200/80 space-y-2.5" aria-label={`Past projects for ${candidate.name}`}>
             <div className="flex items-center space-x-1.5 text-xs font-bold text-slate-800">
-              <Briefcase className="w-3.5 h-3.5 text-indigo-600" />
+              <Briefcase className="w-3.5 h-3.5 text-indigo-600" aria-hidden="true" />
               <span>Past Landmark Builds</span>
             </div>
             {(candidate.pastProjects || []).map((proj, i) => (
@@ -285,18 +295,21 @@ export const CandidateCard: React.FC<CandidateCardProps> = ({
           <button
             onClick={() => setExpanded(!expanded)}
             className="inline-flex items-center text-xs font-semibold text-slate-500 hover:text-slate-900 transition-colors"
+            aria-expanded={expanded}
+            aria-controls={`candidate-details-${candidate.id}`}
           >
             <span>{expanded ? 'Less' : 'More'}</span>
-            {expanded ? <ChevronUp className="w-3.5 h-3.5 ml-0.5" /> : <ChevronDown className="w-3.5 h-3.5 ml-0.5" />}
+            {expanded ? <ChevronUp className="w-3.5 h-3.5 ml-0.5" aria-hidden="true" /> : <ChevronDown className="w-3.5 h-3.5 ml-0.5" aria-hidden="true" />}
           </button>
 
           {onOpenRadarModal && (
             <button
               onClick={() => onOpenRadarModal(candidate)}
               className="inline-flex items-center space-x-1 text-xs font-bold text-indigo-600 hover:text-indigo-800 bg-indigo-50 hover:bg-indigo-100 px-2 py-1 rounded-lg border border-indigo-200 transition-colors"
+              aria-label={`View 6-axis verified radar for ${candidate.name}`}
               title="View 6-Axis Verified Radar"
             >
-              <Radar className="w-3.5 h-3.5" />
+              <Radar className="w-3.5 h-3.5" aria-hidden="true" />
               <span>Radar</span>
             </button>
           )}
@@ -305,9 +318,10 @@ export const CandidateCard: React.FC<CandidateCardProps> = ({
             <button
               onClick={() => onOpenContactModal(candidate)}
               className="inline-flex items-center space-x-1 text-xs font-bold text-purple-600 hover:text-purple-800 bg-purple-50 hover:bg-purple-100 px-2 py-1 rounded-lg border border-purple-200 transition-colors"
+              aria-label={`Send pitch invite to ${candidate.name}`}
               title="Send Matrimony-Style Team Invite"
             >
-              <Send className="w-3 h-3" />
+              <Send className="w-3 h-3" aria-hidden="true" />
               <span>Invite</span>
             </button>
           )}
@@ -318,8 +332,9 @@ export const CandidateCard: React.FC<CandidateCardProps> = ({
             id={`btn-remove-${candidate.id}`}
             onClick={() => onRemoveFromTeam(candidate.id)}
             className="inline-flex items-center space-x-1 px-3 py-1.5 rounded-xl text-xs font-bold bg-rose-50 hover:bg-rose-100 text-rose-700 border border-rose-200 transition-colors"
+            aria-label={`Remove ${candidate.name} from team`}
           >
-            <Check className="w-3.5 h-3.5" />
+            <Check className="w-3.5 h-3.5" aria-hidden="true" />
             <span>Remove</span>
           </button>
         ) : (
@@ -327,8 +342,9 @@ export const CandidateCard: React.FC<CandidateCardProps> = ({
             id={`btn-add-${candidate.id}`}
             onClick={() => onAddToTeam(candidate)}
             className="inline-flex items-center space-x-1.5 px-3.5 py-1.5 rounded-xl text-xs font-bold bg-indigo-600 hover:bg-indigo-700 text-white shadow-xs transition-colors active:scale-98"
+            aria-label={`Add ${candidate.name} to team`}
           >
-            <Plus className="w-3.5 h-3.5" />
+            <Plus className="w-3.5 h-3.5" aria-hidden="true" />
             <span>Add to Team</span>
           </button>
         )}

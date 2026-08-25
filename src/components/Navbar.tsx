@@ -164,6 +164,8 @@ export const Navbar: React.FC<NavbarProps> = ({
                 className="p-2 rounded-xl text-slate-700 hover:text-indigo-600 hover:bg-slate-100 transition-colors focus:outline-none focus:ring-2 focus:ring-indigo-500/20"
                 title="Open Navigation Menu"
                 aria-label="Open Navigation Menu"
+                aria-expanded={drawerOpen}
+                aria-controls="navigation-drawer"
               >
                 <Menu className="w-5 h-5" />
               </button>
@@ -277,7 +279,7 @@ export const Navbar: React.FC<NavbarProps> = ({
 
       {/* Slide-out Left Navigation Drawer */}
       {drawerOpen && (
-        <div className="fixed inset-0 z-50 overflow-hidden animate-in fade-in duration-200">
+        <div id="navigation-drawer" className="fixed inset-0 z-50 overflow-hidden animate-in fade-in duration-200" role="dialog" aria-modal="true" aria-label="Navigation menu">
           
           {/* Backdrop */}
           <div 
@@ -352,17 +354,18 @@ export const Navbar: React.FC<NavbarProps> = ({
                       const Icon = item.icon;
                       const isActive = activeTab === item.id;
 
-                      return (
-                        <button
-                          key={item.id}
-                          id={`drawer-nav-${item.id}`}
-                          onClick={() => handleNavClick(item.id)}
-                          className={`w-full text-left flex items-start space-x-3.5 p-3 rounded-2xl transition-all ${
-                            isActive
-                              ? 'bg-indigo-50 border-2 border-indigo-500/50 shadow-xs'
-                              : 'hover:bg-slate-100/80 border border-transparent'
-                          }`}
-                        >
+                       return (
+                         <button
+                           key={item.id}
+                           id={`drawer-nav-${item.id}`}
+                           onClick={() => handleNavClick(item.id)}
+                           className={`w-full text-left flex items-start space-x-3.5 p-3 rounded-2xl transition-all ${
+                             isActive
+                               ? 'bg-indigo-50 border-2 border-indigo-500/50 shadow-xs'
+                               : 'hover:bg-slate-100/80 border border-transparent'
+                           }`}
+                           aria-current={isActive ? 'page' : undefined}
+                         >
                           <div className={`w-9 h-9 rounded-xl flex items-center justify-center shrink-0 mt-0.5 ${
                             isActive ? 'bg-indigo-600 text-white shadow-xs' : 'bg-slate-100 text-slate-600'
                           }`}>
