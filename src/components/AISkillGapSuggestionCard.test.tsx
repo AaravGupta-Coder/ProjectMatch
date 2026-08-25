@@ -91,7 +91,8 @@ describe('AISkillGapSuggestionCard', () => {
   it('has proper ARIA region role', async () => {
     render(<AISkillGapSuggestionCard {...defaultProps} />);
     await waitFor(() => {
-      const region = screen.getByRole('region', { name: /AI Skill Complementarity Reasoning/i });
+      const region = screen.getByRole('region');
+      expect(region).toHaveAttribute('aria-labelledby', 'ai-skill-gap-heading');
       expect(region).toBeInTheDocument();
     });
   });
