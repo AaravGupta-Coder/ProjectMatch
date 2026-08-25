@@ -1,0 +1,6 @@
+{
+  "name": "ProjectMatch — Team Synergy & Formation OS",
+  "description": "Intelligent team formation platform matching complementary skills, availability, and working styles with dynamic team chemistry simulation and AI project deconstruction.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
