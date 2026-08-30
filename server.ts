@@ -1,7 +1,6 @@
 import express from "express";
 import path from "path";
 import dotenv from "dotenv";
-import { createServer as createViteServer } from "vite";
 import { GoogleGenAI, Type } from "@google/genai";
 import { detectPlatformFromInput } from "./server/connectors/platformDetector";
 import { fetchGitHubData } from "./server/connectors/githubConnector";
@@ -1021,6 +1020,8 @@ app.post("/api/integrations/analyze-evidence-skills", async (req, res) => {
 
 async function startServer() {
   if (process.env.NODE_ENV !== "production") {
+    // Load Vite dynamically to avoid initializing Vite during production / bundled runs
+    const { createServer: createViteServer } = await import("vite");
     const vite = await createViteServer({
       configFile: path.resolve(process.cwd(), "vite.config.ts"),
       server: { middlewareMode: true },
